@@ -27,12 +27,12 @@ function Cartelera(){
         const obtenerDatos = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${claveApi}&language=es-ES&page=1&region=AR`)
         const resultado = await obtenerDatos.json()
         console.log(resultado)
+        setEstrenos(resultado.results)
     }   
 
     const miCartelera = async()=>{
         const obtenerDatos = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${claveApi}&language=es-ES&region=AR`)
         const resultado = await obtenerDatos.json()
-        console.log(resultado)
         setPeliculas(resultado.results)
 
     }
@@ -50,18 +50,17 @@ function Cartelera(){
 
         <main>
 
-            <section id="proximosEstrenos">
-
-            </section>
+            
 
             <section id="cartelera">
-                <div className="container"> 
+                <div className="container mb-3"> 
                     <div className="row justify-content-center gy-3">
                         <h3 className="text-center  mb-0">En cartelera</h3>
                         {peliculas.map((item, index)=>{
                         return <div key={index} className="col-6 col-md-4">
-                                    <div className="card h-100">
-                                        <img src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title} className="img" />
+                                    <div className="text-center card h-100">
+                                        <a href={`https://www.themoviedb.org/movie/${item.id}`}>
+                                        <img src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title} className="text-center" /></a>
                                         <div className="container">
                                             <p className="lead mt-3 mb-3">{recortar(item.overview)}</p>
                                             <p className="lead mb-3">Lanzamiento: {item.release_date}</p>
@@ -74,9 +73,29 @@ function Cartelera(){
                     </div>
                 </div>
             </section>
+
+            <section id="proximosEstrenos">
+                <div className="container">
+                    <div className="row justify-content-center gy-3">
+                        <h3 className="text-center mt-3">Proximos Estrenos</h3>
+                        {estrenos.map((item, index)=>{
+                            return <div key={index} className="col-auto">
+                                <div className="card h-100">
+                                    <a href={`https://www.themoviedb.org/movie/${item.id}`}>
+                                    <img src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title} className="img" /></a>
+                                    <div className="container">
+                                            <p className="lead mt-3 mb-3">{recortar(item.overview)}</p>
+                                            <p className="lead mb-3">Se lanza: {item.release_date}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        })}
+                    </div>
+                </div>
+            </section>
         </main>
 
-        <footer className="py-3 bg-body-tertiary text-center">
+        <footer className="mt-3 py-3 bg-body-tertiary text-center">
             <p className="mb-0">&copy; Desarrollado por: Javier Castillo</p>
         </footer>
     </div>
