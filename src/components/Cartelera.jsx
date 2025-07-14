@@ -6,27 +6,39 @@ function Cartelera(){
 
     const [peliculas, setPeliculas] = useState([])
     const [estrenos, setEstrenos] = useState([])
+    const [populares, setPopulares] = useState([])
+    const [valorInput, setValorInput] = useState("")
     const claveApi = "980644c5248e4e484d9dfd3abc436b32"
-    const maximoCaracter = 100
-    const recortar = (texto) => {
-        if (!texto) {
-            return "Sin descripcion"
-        } else if (texto.length > maximoCaracter) {
-            return texto.substring(0, maximoCaracter) + "..."
-        } else {
-           return texto
-        }
 
-    }
     useEffect(() => {
         miCartelera()
         proximosEstrenos()
+        peliculasPopulares()
     }, [])
+
+    const extraerInput= (e)=>{
+        setValorInput(e.target.value)
+    }
+
+    const buscar = async(e) => {
+        e.preventDefault()
+        const obtenerDatos = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${claveApi}&query=${valorInput}&language=es-ES`)
+        const resultado = await obtenerDatos.json()
+        setPeliculas(resultado.results)
+        
+    }
+
+    const peliculasPopulares = async()=>{
+        const obtenerDatos = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${claveApi}&language=es-ES&region=AR`)
+        const resultado = await obtenerDatos.json()
+        console.log(resultado)
+        setPopulares(resultado.results)
+        
+    }
 
     const proximosEstrenos = async()=>{
         const obtenerDatos = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${claveApi}&language=es-ES&page=1&region=AR`)
         const resultado = await obtenerDatos.json()
-        console.log(resultado)
         setEstrenos(resultado.results)
     }   
 
@@ -42,15 +54,40 @@ function Cartelera(){
             <div className="container ">
                 <h1 className="text-center">Mi Cartelera 🍿</h1>
                 <form className="text-center d-flex justify-content-center gap-3">
-                    <input type="text" placeholder="Buscar..." />
-                    <button className="btn btn-primary">Buscar</button>
+                    <input type="text" placeholder="Buscar..." onChange={extraerInput} />
+                    <button className="btn btn-primary" onClick={buscar}>Buscar</button>
                 </form>
             </div>     
         </nav>
 
         <main>
 
-            
+            <section id="populares" className="overflow-hidden py-4">
+                <div className="scroll-track d-flex align-items-center">
+                    {populares.map((item,index) => (
+                    <div key={index} className="me-3 flex-shrink-0">
+                        <a href={`https://www.themoviedb.org/movie/${item.id}`}>
+                        <img
+                        src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                        className="scroll-image"
+                        alt={item.title}
+                        /></a>
+                    </div>
+                    ))}
+                    
+                    {populares.map((item, index) => (
+                    <div key={index} className="me-3 flex-shrink-0">
+                        <a href={`https://www.themoviedb.org/movie/${item.id}`}>
+                        <img
+                        src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                        className="scroll-image"
+                        alt={item.title}
+                        /></a>
+                    </div>
+                    ))}
+                </div>
+            </section>
+
 
             <section id="cartelera">
                 <div className="container mb-3"> 
@@ -61,12 +98,7 @@ function Cartelera(){
                                     <div className="text-center card h-100">
                                         <a href={`https://www.themoviedb.org/movie/${item.id}`}>
                                         <img src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title} className="text-center" /></a>
-                                        <div className="container">
-                                            <p className="lead mt-3 mb-3">{recortar(item.overview)}</p>
-                                            <p className="lead mb-3">Lanzamiento: {item.release_date}</p>
-                                        </div>
-                                        
-
+                                        <p className="lead mt-3 mb-3">Lanzamiento: {item.release_date}</p>   
                                     </div>
                                 </div>
                         })}
@@ -83,10 +115,7 @@ function Cartelera(){
                                 <div className="text-center card h-100">
                                     <a href={`https://www.themoviedb.org/movie/${item.id}`}>
                                     <img src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title} className="img" /></a>
-                                    <div className="container">
-                                            <p className="lead mt-3 mb-3">{recortar(item.overview)}</p>
-                                            <p className="lead mb-3">Se lanza: {item.release_date}</p>
-                                    </div>
+                                    <p className="lead mt-3 mb-3">Se lanza: {item.release_date}</p>
                                 </div>
                             </div>
                         })}

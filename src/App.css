@@ -1,6 +1,39 @@
 img{
+    width: 100%;
     height: 500px;
 }
+
+.img-2{
+    width: 250px;
+    height: 250px;
+}
+
+.scroll-track {
+  display: flex;
+  width: max-content;
+  animation: scrollLeft 60s linear infinite;
+}
+
+.scroll-image {
+  height: 250px;
+  border-radius: 10px;
+  transition: transform 0.3s;
+}
+
+.scroll-image:hover {
+  transform: scale(1.05);
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
 
 @media (max-width: 576px) {
   img{
