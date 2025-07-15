@@ -80,9 +80,9 @@ function Cartelera(){
 
         <main>
 
-            <section id="populares" className="overflow-hidden">
+            <section id="populares" className="overflow-hidden mb-5">
                 <h3 className="text-center mb-3">Populares</h3>
-                <div className="scroll-track d-flex align-items-center mb-5">
+                <div className="scroll-track d-flex align-items-center">
                     {populares.map((item,index) => (
                     <div key={index} className="me-3 flex-shrink-0">
                         <a href={`https://www.themoviedb.org/movie/${item.id}`}>
@@ -110,7 +110,6 @@ function Cartelera(){
 
             <section id="cartelera" className="bg-body-tertiary">
                 <div className="container mb-3"> 
-                    
                     <div className="row justify-content-center gy-3">
                         <p className="mt-5 mb-0 text-center">{mensaje}</p>
                         <p className="text-danger text-center">{error}</p>
